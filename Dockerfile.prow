@@ -6,6 +6,13 @@ WORKDIR /workspace
 COPY . .
 
 RUN go mod vendor
+
+# Build frontend assets (required for //go:embed app/dist)
+RUN curl -fsSL https://nodejs.org/download/release/v20.12.2/node-v20.12.2-linux-x64.tar.gz \
+    | tar xz -C /usr/local --strip-components=1 \
+    && cd ui/app && npm install && make all \
+    && cd /workspace && make assets
+
 # adding the cgo flag here to not break the architecture CI builds
 RUN go install github.com/prometheus/promu@v0.17.0 && promu -c .promu-cgo.yml build -v --cgo --prefix ./
 
