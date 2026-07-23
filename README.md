@@ -1,5 +1,7 @@
 # Alertmanager [![CircleCI](https://circleci.com/gh/prometheus/alertmanager/tree/main.svg?style=shield)][circleci]
 
+<!-- Test change to verify branch protection rules -->
+
 [![Docker Repository on Quay](https://quay.io/repository/prometheus/alertmanager/status "Docker Repository on Quay")][quay]
 [![Docker Pulls](https://img.shields.io/docker/pulls/prom/alertmanager.svg?maxAge=604800)][hub]
 
