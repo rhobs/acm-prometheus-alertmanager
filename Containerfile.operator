@@ -1,10 +1,19 @@
 # Copyright Contributors to the Open Cluster Management project
 # Licensed under the Apache License 2.0
 
-FROM brew.registry.redhat.io/rh-osbs/openshift-golang-builder:rhel_9_1.25 AS builder
+FROM registry.access.redhat.com/ubi9/nodejs-22:latest AS frontend
 
 WORKDIR /workspace
 COPY . .
+
+RUN source /cachi2/cachi2.env && \
+    cd ui/app && npm ci --offline && npm run build && \
+    cd /workspace/template && npm ci --offline && make email.tmpl
+
+FROM brew.registry.redhat.io/rh-osbs/openshift-golang-builder:rhel_9_1.25 AS builder
+
+WORKDIR /workspace
+COPY --from=frontend /workspace .
 
 RUN cd promu && go build -mod=mod -o /cachi2/output/deps/gomod/bin/promu
 
